@@ -38,7 +38,9 @@ PERMISSIONS = (
 
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []    
 
 
 class Project(models.Model):
@@ -46,7 +48,6 @@ class Project(models.Model):
     description = models.CharField(max_length=1024, blank=True)
     type = models.CharField(max_length=20, blank=True, choices=TYPES)
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects')
-    # contributors = models.ManyToManyField(User, related_name='user_projects')
 
     def __str__(self):
         return self.title
@@ -66,7 +67,7 @@ class Contributor(models.Model):
         # ordering = ["user_id"]
 
     def __str__(self):
-        return f"user: {self.user}, project: {self.project}"
+        return f"user : {self.user}, user id : {self.user.id}  / project: {self.project}, project id : {self.project.id}"
 
 
 
@@ -77,8 +78,8 @@ class Issue(models.Model):
     priority = models.CharField(max_length=20, choices=PRIORITIES, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='issues')
     status = models.CharField(max_length=20, choices=STATUS, blank=True)
-    author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='issues')
-    assignee_user = models.ForeignKey(Contributor, on_delete=models.CASCADE, related_name='issues', null=True)
+    author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_user_issues')
+    assignee_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee_user_issues', null=True, blank=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -86,9 +87,9 @@ class Issue(models.Model):
 
 
 class Comment(models.Model):
-    description = models.CharField(max_length=1024)
+    description = models.CharField(max_length=1024, null=False, blank=True)
     author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comments')
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
