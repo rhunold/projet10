@@ -39,8 +39,9 @@ PERMISSIONS = (
 
 class User(AbstractUser):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []    
+    first_name = models.CharField(max_length=30, blank=False)
+    last_name = models.CharField(max_length=30, blank=False)
+    REQUIRED_FIELDS = []
 
 
 class Project(models.Model):
@@ -67,7 +68,7 @@ class Contributor(models.Model):
         # ordering = ["user_id"]
 
     def __str__(self):
-        return f"user : {self.user}, user id : {self.user.id}  / project: {self.project}, project id : {self.project.id}"
+        return self.permission
 
 
 
