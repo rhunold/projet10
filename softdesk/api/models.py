@@ -48,8 +48,8 @@ class User(AbstractUser):
 class Project(models.Model):
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=1024, blank=True)
-    type = models.CharField(max_length=20, blank=True, choices=TYPES)
-    author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects')
+    type = models.CharField(max_length=20, choices=TYPES, blank=False)
+    author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects', blank=True, null=False)
 
     def __str__(self):
         return self.title
