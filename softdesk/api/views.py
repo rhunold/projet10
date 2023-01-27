@@ -22,7 +22,7 @@ from .serializers import (
 class SignUpView(ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
-
+    
 
 class SetSerializerMixin:
     """ Mixin to apply the the appropriate serializer."""
@@ -126,24 +126,19 @@ class IssueViewset(SetSerializerMixin, ModelViewSet):
         status = self.request.data['status']
         assignee_user = self.request.data['assignee_user']
             
-        required_fields = [title, description, tag, priority, status]
-        if any(field == "" for field in required_fields):
-            raise ValidationError(f"You must indicate a title, a description, a tag, a priority and a status for this issue")
-        
         if assignee_user != "":
             contributors = [contributor.user for contributor in Contributor.objects.filter(project_id=project_id)]
             if serializer.validated_data['assignee_user'] not in contributors:
-                raise ValidationError({f"Assignee user must be a contributor of this project."})
-            # if User.objects.get(id=assignee_user).DoesNotExist:
-            #     raise APIException(f"User '{assignee_user}' does not exist.")    
+                raise ValidationError({f"Assignee user must be a contributor of this project."}) 
             else:
-                return serializer.save(author_user=user, project=project, 
-                        title=title, description=description, 
-                        tag=tag, priority=priority, status=status, assignee_user=User.objects.get(id=assignee_user))
+                assignee_user =  User.objects.get(id=assignee_user)
         else:
-            return serializer.save(author_user=user, project=project, 
-                        title=title, description=description, 
-                        tag=tag, priority=priority, status=status, assignee_user=user)        
+            assignee_user = User.objects.get(id=user.id)
+            
+        return serializer.save(author_user=user, project=project, 
+                                title=title, description=description, 
+                                tag=tag, priority=priority, status=status, 
+                                assignee_user=assignee_user)        
   
     perform_update = perform_create
 
@@ -173,10 +168,7 @@ class CommentViewset(SetSerializerMixin, ModelViewSet):
 
         description = self.request.data['description']
         
-        if description == "":        
-            raise ValidationError(f"You must indicate a a description for your comment.")
-        else:
-            return serializer.save(author_user=user, issue=issue, description=description)
+        return serializer.save(author_user=user, issue=issue, description=description)
         
     perform_update = perform_create        
    
