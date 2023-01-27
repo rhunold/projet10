@@ -38,7 +38,7 @@ You can use the database or create a new one (delete the db.sqlite3 file in the 
 You can log after you run the server (see next 'Run server' instructions below.)
 #### Access of the actual database
 | typeUser | email | password | user_id 
-|-|-|
+|-|-|-|
 | SuperUser | raphael.hunold@gmail.com | Héà2flzizl! | 1
 | User | toto@gmail.com | tatatiti | 2
 | User | max@gmail.com | maxpass8 | 3
@@ -76,6 +76,7 @@ Server adress : [http://127.0.0.1:8000](http://127.0.0.1:8000)
 ## Actions and permissions
 
 | Action | Permission |
+|-|-|
 | Signup | Everyone |
 | Login | Everyone who had signup |
 | Create a project | Every logged user |
