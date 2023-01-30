@@ -175,3 +175,4 @@ class CommentViewset(SetSerializerMixin, ModelViewSet):
         return serializer.save(author_user=user, issue=issue, description=description)
 
     perform_update = perform_create
+
