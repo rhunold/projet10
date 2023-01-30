@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 from django.shortcuts import get_object_or_404
 from .models import Contributor, Project
-
+from rest_framework.exceptions import APIException
 
 class IsProjectContributor(BasePermission):
     def has_permission(self, request, view):
@@ -23,9 +23,8 @@ class IsProjectContributor(BasePermission):
         if project_id is None:
             return True
 
-        if project_id in contributions_of_user:
+        if project_id in contributions_of_user and view.action in ['list', 'retrieve']:
             return True
-
 
 class IsObjectAuthor(BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -34,12 +33,20 @@ class IsObjectAuthor(BasePermission):
 
 
 class IsProjectCreator(BasePermission):
-    def has_object_permission(self, request, view, obj):
-
+    def has_permission(self, request, view):     
         project_id = view.kwargs.get('project_pk')
         project = get_object_or_404(Project, id=project_id)
 
-        user_contrib = Contributor.objects.get(project=project, user=request.user)
+        try:
+            user_contrib = Contributor.objects.get(project=project, user=request.user)
 
-        if user_contrib.permission == 'CREATOR' and view.action in ['create', 'destroy']:
+            print(f"Test {user_contrib}")
+
+        except Contributor.DoesNotExist:
+            raise APIException("You can't access users of a project you not belong too.")        
+
+        if user_contrib.permission == 'CREATOR':
+            return True
+
+        if user_contrib.permission == 'CONTRIBUTOR' and view.action in ['list', 'retrieve"']:
             return True
