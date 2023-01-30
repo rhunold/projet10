@@ -44,9 +44,6 @@ class ProjectViewset(SetSerializerMixin, ModelViewSet):
 
         user_projects = [contrib.project_id for contrib in Contributor.objects.filter(user=user)]
         queryset = Project.objects.filter(id__in=user_projects)
-        print(f"User logged : {user}")
-        print(f"user_projects : {user_projects}")
-        # print(f"queryset : {queryset}")
         return queryset
 
     def perform_create(self, serializer):
@@ -58,14 +55,12 @@ class ProjectViewset(SetSerializerMixin, ModelViewSet):
 
 class ContributorsViewset(ModelViewSet):
     serializer_class = ContributorSerializer
-    permission_classes = [IsAuthenticated, IsProjectContributor, IsProjectCreator]
+    permission_classes = [IsAuthenticated, IsProjectCreator]
 
     def get_queryset(self):
         project_id = self.kwargs['project_pk']
         project = get_object_or_404(Project, id=project_id)
         queryset = project.contributors.all()
-        print(f"project : {project}")
-        # print(f"queryset : {queryset}")
         return queryset
 
     def perform_create(self, serializer):
@@ -80,7 +75,7 @@ class ContributorsViewset(ModelViewSet):
         except User.DoesNotExist:
             raise APIException(f"User '{user}' does not exist.")
         except Project.DoesNotExist:
-            raise APIException(f"Project '{project}' does not exist.")
+            raise APIException(f"Project '{project}' does not exist.")     
 
         if Contributor.objects.filter(user=user, project=project).exists():
             raise APIException(f"User '{user}' is already a contributor of project '{project_id}'.")
