@@ -75,7 +75,7 @@ class ContributorsViewset(ModelViewSet):
         except User.DoesNotExist:
             raise APIException(f"User '{user}' does not exist.")
         except Project.DoesNotExist:
-            raise APIException(f"Project '{project}' does not exist.")     
+            raise APIException(f"Project '{project}' does not exist.")
 
         if Contributor.objects.filter(user=user, project=project).exists():
             raise APIException(f"User '{user}' is already a contributor of project '{project_id}'.")
