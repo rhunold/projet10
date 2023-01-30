@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from api.views import SignUpView, ContributorsViewset, ProjectViewset, ContributorsViewset, IssueViewset, CommentViewset
+from api.views import SignUpView, ContributorsViewset, ProjectViewset, IssueViewset, CommentViewset
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -31,5 +31,3 @@ urlpatterns = [
     path('', include(issues_router.urls)),
     path('', include(comments_router.urls)),
 ]
-
-# urlpatterns += project_router
