@@ -43,3 +43,4 @@ class IsProjectCreator(BasePermission):
 
         if user_contrib.permission == 'CREATOR' and view.action in ['create', 'destroy']:
             return True
+
