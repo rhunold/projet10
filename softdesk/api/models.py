@@ -50,7 +50,7 @@ class Project(models.Model):
                                     related_name='projects', blank=True, null=False)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} /  id {self.id} / by {self.author_user}"
 
 
 class Contributor(models.Model):
@@ -66,7 +66,7 @@ class Contributor(models.Model):
         )
 
     def __str__(self):
-        return self.permission
+        return f"{self.user} is a {self.permission} on project {self.project.id} with role {self.role}"
 
 
 class Issue(models.Model):
@@ -83,7 +83,7 @@ class Issue(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} on project {self.project.id} assigned to {self.assignee_user}"
 
 
 class Comment(models.Model):
@@ -93,4 +93,4 @@ class Comment(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.description
+        return f" {self.author_user} comment on issue {self.issue.id} : {self.description}"
