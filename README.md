@@ -1,7 +1,6 @@
 # API - SoftDesk
 An API to report issues on SoftDesk app
 
-
 ## Installation
 
 
@@ -31,7 +30,7 @@ pip install -r requirements.txt
 ```
 
 ## Database
-You can use the database or create a new one (delete the db.sqlite3 file in the softdesk folder befor)
+You can use the database or create a new one (delete the db.sqlite3 file in the softdesk folder before.)
 
 ### Using the actual database
 
@@ -45,7 +44,7 @@ You can log after you run the server (see next 'Run server' instructions below.)
 | User | tom@gmail.com | tompass8 | 4
 
 ### Create a new database
-To create the database, use theses line commands
+To create a new database, first delete the actual one, then use theses line commands
 
 #### Make migrations
 ```
@@ -87,16 +86,19 @@ Server adress : [http://127.0.0.1:8000](http://127.0.0.1:8000)
 | Modify or delete project, issue and comment | Project/Issue/Comment creator |
 | All actions on all objects | Superuser |
 
-## API documentation 
-[https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a](https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a)
+## API documentation
+On the documentation, you can see all the endpoints and also some rules about permissions, contraints and restrictions.
 
-API documentation : 
+API documentation : [https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a](https://documenter.getpostman.com/view/25526925/2s8ZDeSy1a)
 
 ## Other things about this project
 This project use the module flake8 to respect pep8 guideline.
 To test it by yourself, go to the root of the project and use this command line to generate a html file in the flake8 folder.
 ```
-python3  flake8 --format=html --htmldir=flake8
+flake8 softdesk --format=html --htmldir=flake8-report --max-line-length=120 --exclude=migrations
 ```
 
+```
+flake8 softdesk --max-line-length=120 --exclude=migrations
+```
 
