@@ -73,3 +73,4 @@ class CommentDetailSerializer(ModelSerializer):
         model = Comment
         exclude = ['author_user', 'issue']
         read_only = ['id', 'author_user_id', 'issue_id', 'created_time']
+
