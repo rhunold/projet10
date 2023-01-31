@@ -24,7 +24,7 @@ class IsProjectContributor(BasePermission):
         if project_id is None:
             return True
 
-        if project_id in contributions_of_user and view.action in ['list', 'retrieve']:
+        if project_id in contributions_of_user and view.action in ['list', 'retrieve'] or user.is_superuser:
             return True
 
 
@@ -36,6 +36,10 @@ class IsObjectAuthor(BasePermission):
 
 class IsProjectCreator(BasePermission):
     def has_permission(self, request, view):
+        
+        if request.user.is_superuser:
+            return True
+        
         project_id = view.kwargs.get('project_pk')
         project = get_object_or_404(Project, id=project_id)
 
