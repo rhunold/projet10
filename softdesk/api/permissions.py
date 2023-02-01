@@ -24,13 +24,13 @@ class IsProjectContributor(BasePermission):
         if project_id is None:
             return True
 
-        if project_id in contributions_of_user or user.is_superuser: # and view.action in ['list', 'retrieve']: 
+        if project_id in contributions_of_user:
             return True
 
 
 class IsObjectAuthor(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if obj.author_user == request.user: # or view.action in ['list', 'retrieve']:
+        if obj.author_user == request.user or request.user.is_superuser:
             return True
 
 
