@@ -19,8 +19,6 @@ class UserSerializer(ModelSerializer):
 
     def validate(self, data):
         """ Constraint on first name and last name. Use email as username """
-        # first_name = data['first_name']
-        # last_name = data['last_name']
         email = data['email']
         data['username'] = email
         return data
@@ -64,12 +62,14 @@ class IssueDetailSerializer(ModelSerializer):
 class CommentListSerializer(ModelSerializer):
     class Meta:
         model = Comment
-        exclude = ['created_time']
-        read_only = ['id', 'author_user_id', 'issue_id', 'created_time']
+        fields = '__all__'
+        extra_kwargs = {'author_user': {'required': False}, 'issue' : {'required': False}}
+        read_only = ['id', 'author_user', 'issue', 'created_time']     
 
 
 class CommentDetailSerializer(ModelSerializer):
     class Meta:
         model = Comment
-        exclude = ['author_user', 'issue']
+        exclude = ['created_time']
         read_only = ['id', 'author_user_id', 'issue_id', 'created_time']
+
