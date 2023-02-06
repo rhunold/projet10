@@ -22,19 +22,7 @@ class SignUpView(ModelViewSet):
     serializer_class = UserSerializer
 
 
-class SetSerializerMixin:
-    """ Mixin to apply the the appropriate serializer."""
-
-    detail_serializer_class = None
-
-    def get_serializer_class(self):
-        allowed_actions = ['retrieve', 'update', 'create']
-        if self.action in allowed_actions and self.detail_serializer_class is not None:
-            return self.detail_serializer_class
-        return super().get_serializer_class()
-
-
-class ProjectViewset(SetSerializerMixin, ModelViewSet):
+class ProjectViewset(ModelViewSet):
     serializer_class = ProjectListSerializer
     detail_serializer_class = ProjectDetailSerializer
     permission_classes = [IsAuthenticated, IsProjectContributor, IsObjectAuthor]
@@ -97,7 +85,7 @@ class ContributorsViewset(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class IssueViewset(SetSerializerMixin, ModelViewSet):
+class IssueViewset(ModelViewSet):
     serializer_class = IssueListSerializer
     detail_serializer_class = IssueDetailSerializer
     permission_classes = [IsAuthenticated, IsProjectContributor, IsObjectAuthor]
@@ -144,7 +132,7 @@ class IssueViewset(SetSerializerMixin, ModelViewSet):
     perform_update = perform_create
 
 
-class CommentViewset(SetSerializerMixin, ModelViewSet):
+class CommentViewset(ModelViewSet):
 
     serializer_class = CommentListSerializer
     detail_serializer_class = CommentDetailSerializer
@@ -167,6 +155,6 @@ class CommentViewset(SetSerializerMixin, ModelViewSet):
 
         description = self.request.data['description']
 
-        return serializer.save(author_user=user, issue=issue, description=description)
+        serializer.save(author_user=user, issue=issue, description=description)
 
     perform_update = perform_create
